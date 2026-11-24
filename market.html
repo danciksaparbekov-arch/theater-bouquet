@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<style>html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+<title>Букет с рынка</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap">
+<style>
+/* Шпаргалка на рынке: одна колонка, позиции сверху вниз, итог прилипает к низу экрана.
+   Цвета из самого букета: абрикосовые розы (её) и синий эрингиум (его). */
+:root {
+  --bg: #f2f5f8; --surface: #ffffff; --ink: #1c2632; --muted: #5b6878; --line: #d9e1e9;
+  --rose: #d9702f; --blue: #3a69a3; --green: #4f7d5c;
+  --ok: #2c8a57; --warn: #b9771a; --bad: #bf4237;
+  --font: 'Onest', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121922; --surface: #1b2430; --ink: #e8edf3; --muted: #98a6b5; --line: #2b3745;
+  --rose: #f0955a; --blue: #84a9da; --green: #86b394;
+  --ok: #5cc28a; --warn: #e2a64c; --bad: #ea7468; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121922; --surface: #1b2430; --ink: #e8edf3; --muted: #98a6b5; --line: #2b3745;
+  --rose: #f0955a; --blue: #84a9da; --green: #86b394;
+  --ok: #5cc28a; --warn: #e2a64c; --bad: #ea7468; color-scheme: dark }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 400 16px/1.5 var(--font); }
+.wrap { max-width: 560px; margin: 0 auto; padding-block: 20px 170px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1 { font-size: 28px; line-height: 1.15; margin: 0 0 4px; letter-spacing: -0.01em; text-wrap: balance; }
+h2 { font-size: 18px; margin: 30px 0 10px; text-wrap: balance; }
+p { margin: 0 0 10px; }
+.muted { color: var(--muted); }
+.small { font-size: 14px; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* позиции */
+.items { display: flex; flex-direction: column; gap: 10px; }
+.item { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; display: grid; gap: 8px; }
+.item-head { display: flex; gap: 10px; align-items: flex-start; }
+.swatch { width: 12px; height: 12px; border-radius: 50%; margin-top: 6px; flex: none; }
+.item-title { min-width: 0; flex: 1; }
+.item-title b { display: block; font-weight: 600; }
+.item-title span { display: block; font-size: 14px; color: var(--muted); }
+.sub { font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+.fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.fields label { font-size: 13px; color: var(--muted); display: grid; gap: 3px; }
+input[type=number], input[type=text] { width: 100%; font: 500 17px/1.2 var(--font); color: var(--ink); background: var(--bg);
+  border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-variant-numeric: tabular-nums; }
+.chip { font-size: 13px; font-weight: 500; padding: 4px 10px; border-radius: 999px; justify-self: start; }
+.chip.warn { color: var(--warn); background: color-mix(in srgb, var(--warn) 14%, transparent); }
+.chip.ok { color: var(--ok); background: color-mix(in srgb, var(--ok) 14%, transparent); }
+.del { background: none; border: 0; color: var(--muted); font: inherit; font-size: 14px; cursor: pointer; padding: 0; justify-self: start; }
+
+button.btn { font: 600 16px/1 var(--font); border: 0; border-radius: 12px; padding: 13px 16px; cursor: pointer; }
+.btn.primary { background: var(--blue); color: var(--surface); }
+.btn.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
+.row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+
+/* списки-подсказки */
+ul, ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.no li::marker { color: var(--bad); }
+.note { border-left: 3px solid var(--line); padding: 2px 0 2px 12px; color: var(--muted); font-size: 15px; }
+a { color: var(--blue); }
+
+/* карточка для продавца: крупно, читается с расстояния */
+.show { background: var(--surface); border: 2px solid var(--rose); border-radius: 16px; padding: 16px 18px; display: grid; gap: 8px; }
+.show p { margin: 0; font-size: 21px; line-height: 1.35; font-weight: 500; }
+
+/* итог внизу */
+.total { position: fixed; left: 0; right: 0; bottom: 0; background: var(--surface); border-top: 1px solid var(--line);
+  padding-top: 12px; padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.total-in { max-width: 560px; margin: 0 auto; display: grid; gap: 8px; }
+.total-line { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.total-sum { font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.total-state { font-size: 14px; font-weight: 600; text-align: right; }
+.bar { position: relative; height: 10px; border-radius: 5px; background: var(--line); overflow: hidden; }
+.bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 5px; background: var(--ok); }
+.bar b { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--ink); opacity: .5; }
+.scale { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Букет с рынка</h1>
+  <p class="small"><a href="./">Эскиз букета с 3D-моделью</a></p>
+  <p class="muted">На воскресенье, 29.11, в театр. Воздушный, но аккуратный: абрикосовое и персиковое, немного синего, без резких запахов.</p>
+
+  <h2>Показать продавцу</h2>
+  <p class="muted small">Открой фото-референс из галереи и покажи вместе с этой карточкой.</p>
+  <div class="show">
+    <p>Хочу букет как на фото: воздушный, аккуратный, перевязан шпагатом.</p>
+    <p>Гамма: персиковый и абрикосовый, 1–2 ярко-оранжевых цветка, заметный синий акцент, тёмная зелень.</p>
+    <p>Вместо георгинов: кустовые розы и эустома.</p>
+    <p>Синий: эрингиум.</p>
+    <p>Важно: без сильного запаха. Не надо лилий, гипсофилы, лаванды, эвкалипта.</p>
+    <p>Небольшой, бюджет до 2 500 сом.</p>
+  </div>
+
+  <h2>Что купить</h2>
+  <p class="muted small">Сначала обойди ряды и узнай цены. Впиши цену за ветку: итог посчитается внизу.</p>
+  <div class="items" id="items"></div>
+  <div class="row">
+    <button class="btn ghost" id="add" type="button">Добавить позицию</button>
+    <button class="btn ghost" id="reset" type="button">Очистить цены</button>
+  </div>
+
+  <h2>Спросить бота</h2>
+  <p>Скопируй раскладку и отправь <a href="https://t.me/danislam_claude_bot" target="_blank" rel="noopener">@danislam_claude_bot</a>, допиши вопрос. Можно приложить фото ряда или ценника.</p>
+  <div class="row">
+    <button class="btn primary" id="copy" type="button">Скопировать для бота</button>
+  </div>
+  <p class="muted small" id="copied" hidden>Скопировано. Вставь в чат с ботом.</p>
+  <textarea id="copybox" readonly hidden style="width:100%;min-height:120px;margin-top:8px;font:14px/1.4 var(--font);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px"></textarea>
+
+  <h2>На рынке</h2>
+  <ul>
+    <li>Обойди ряды и спроси цену за ветку, ничего не покупая. У соседних продавцов цены отличаются в разы.</li>
+    <li>Понюхай каждую ветку. Если тебе от запаха нормально, ей тоже будет нормально.</li>
+    <li>Бери всё у одного продавца и попроси скидку за набор. Попроси его же собрать букет.</li>
+    <li>Не увеличивай букет, если остались деньги. Компактный удобно нести после театра.</li>
+  </ul>
+
+  <h2>Не брать</h2>
+  <ul class="no">
+    <li>Лилии и гиацинты: сильный запах.</li>
+    <li>Гипсофилу: пахнет неприятно.</li>
+    <li>Лаванду и эвкалипт: ароматные.</li>
+    <li>Ароматизированную упаковку и «спрей для свежести».</li>
+  </ul>
+
+  <h2>Как собрать самому</h2>
+  <ol>
+    <li>Оборви листья и шипы с нижних двух третей стеблей.</li>
+    <li>Самую красивую розу в центр. Каждый следующий стебель прикладывай под одним наклоном и поворачивай букет на четверть оборота.</li>
+    <li>Розы чуть вразнобой по высоте, синие точками, зелень по краям.</li>
+    <li>Перевяжи шпагатом в месте, где держишь: туго, 2–3 оборота.</li>
+    <li>Срежь стебли ровно наискосок и сразу поставь в воду.</li>
+  </ol>
+
+  <h2>До вечера</h2>
+  <ul>
+    <li>Купи в субботу вечером или в воскресенье утром. Держи в воде, в прохладе, не у батареи.</li>
+    <li>Перед выходом оберни низ стеблей мокрой салфеткой, сверху пакет или фольга.</li>
+    <li>На улице оберни бумагой целиком: мороз цветам вреднее всего.</li>
+    <li>Дари после спектакля.</li>
+  </ul>
+  <p class="note">Ориентир по Бишкеку на 24.11: простые розы в магазинах около 40–50 сом за штуку, у флористов похожий букет около 6 600. Кустовая роза дороже 300 сом за ветку уже дорого.</p>
+</div>
+
+<div class="total" aria-live="polite">
+  <div class="total-in">
+    <div class="total-line">
+      <span class="total-sum" id="sum">0 сом</span>
+      <span class="total-state" id="state">Впиши цены</span>
+    </div>
+    <div class="bar" role="img" id="barimg" aria-label="Итог относительно бюджета"><i id="fill"></i><b id="mark"></b></div>
+    <div class="scale"><span>0</span><span id="tgtLbl">цель 2 500</span><span>потолок 5 000</span></div>
+  </div>
+</div>
+
+<script>
+const TARGET = 2500, CAP = 5000;
+const KEY = 'bouquet-market-v1';
+const DEFAULTS = [
+  { id: 'rose', name: 'Кустовые розы', hint: 'главное — персиковые и абрикосовые, 1–2 ярко-оранжевых бутона; кремовых мало (сольются с её бежевым платьем); можно ранункулюсы', qty: 4, warn: 300, color: '--rose' },
+  { id: 'eust', name: 'Эустома', hint: 'персиковая; кремовой 1 ветка максимум, для воздушности', qty: 3, warn: 300, color: '--rose' },
+  { id: 'blue', name: 'Синий акцент', hint: 'эрингиум, или лимониум, если почти не пахнет', qty: 4, warn: 250, color: '--blue' },
+  { id: 'green', name: 'Зелень', hint: 'тёмный рускус, без запаха (перекличка с изумрудным шарфом)', qty: 3, warn: 150, color: '--green' },
+  { id: 'wrap', name: 'Упаковка', hint: 'шпагат, кремовая или белая бумага (под её чёрно-белую куртку) или без бумаги, лента голубая и оранжевая', qty: 1, warn: 400, color: '--muted' },
+  { id: 'spare', name: 'Ветка на пробу', hint: 'потренироваться собирать', qty: 1, warn: 300, color: '--muted' },
+];
+let items = load();
+
+function load() {
+  // из сохранённого берём только его цены/количества и свои позиции; названия и подсказки — всегда свежие
+  let saved = [];
+  try { const s = JSON.parse(localStorage.getItem(KEY)); if (Array.isArray(s)) saved = s; } catch (e) {}
+  const byId = Object.fromEntries(saved.map(s => [s.id, s]));
+  const base = DEFAULTS.map(d => ({ ...d, qty: byId[d.id]?.qty ?? d.qty, price: byId[d.id]?.price ?? '' }));
+  return base.concat(saved.filter(s => s.custom));
+}
+function save() { try { localStorage.setItem(KEY, JSON.stringify(items)); } catch (e) {} }
+const fmt = n => Math.round(n).toLocaleString('ru-RU') + ' сом';
+const sub = it => (Number(it.qty) || 0) * (Number(it.price) || 0);
+
+function el(tag, attrs = {}, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k.startsWith('on')) e.addEventListener(k.slice(2), v); else if (k === 'class') e.className = v; else e.setAttribute(k, v);
+  }
+  for (const k of kids.flat()) if (k != null) e.append(k.nodeType ? k : String(k));
+  return e;
+}
+
+function render() {
+  const box = document.getElementById('items');
+  box.replaceChildren(...items.map((it, i) => {
+    const s = sub(it);
+    const subEl = el('span', { class: 'sub' }, s ? fmt(s) : '—');
+    const chip = el('span', { class: 'chip' });
+    const updChip = () => {
+      const p = Number(it.price) || 0;
+      chip.hidden = !p;
+      chip.className = 'chip ' + (p > it.warn ? 'warn' : 'ok');
+      chip.textContent = p > it.warn ? `Дороговато: больше ${it.warn} за штуку, поищи дальше` : 'Цена нормальная';
+    };
+    const name = it.custom
+      ? el('input', { type: 'text', id: `n-${it.id}`, value: it.name, 'aria-label': 'Название', oninput: e => { it.name = e.target.value; save(); } })
+      : el('b', {}, it.name);
+    const qty = el('input', { type: 'number', inputmode: 'numeric', min: '0', id: `q-${it.id}`, value: it.qty,
+      oninput: e => { it.qty = e.target.value; subEl.textContent = sub(it) ? fmt(sub(it)) : '—'; save(); total(); } });
+    const price = el('input', { type: 'number', inputmode: 'numeric', min: '0', id: `p-${it.id}`, value: it.price, placeholder: 'цена',
+      oninput: e => { it.price = e.target.value; subEl.textContent = sub(it) ? fmt(sub(it)) : '—'; updChip(); save(); total(); } });
+    const sw = el('span', { class: 'swatch' }); sw.style.background = `var(${it.color})`;
+    updChip();
+    return el('div', { class: 'item' },
+      el('div', { class: 'item-head' }, sw, el('div', { class: 'item-title' }, name, it.hint ? el('span', {}, it.hint) : null), subEl),
+      el('div', { class: 'fields' },
+        el('label', {}, it.id === 'wrap' ? 'Наборов' : 'Сколько веток', qty),
+        el('label', {}, it.id === 'wrap' ? 'Цена за всё, сом' : 'Цена за ветку, сом', price)),
+      chip,
+      it.custom ? el('button', { class: 'del', type: 'button', onclick: () => { items.splice(i, 1); save(); render(); } }, 'Убрать') : null);
+  }));
+  total();
+}
+
+function total() {
+  const t = items.reduce((a, it) => a + sub(it), 0);
+  document.getElementById('sum').textContent = fmt(t);
+  const st = document.getElementById('state'), fill = document.getElementById('fill');
+  let color = 'var(--ok)', text;
+  if (!t) text = 'Впиши цены';
+  else if (t <= TARGET) text = `В цели, запас ${fmt(TARGET - t)}`;
+  else if (t <= CAP) { text = `Выше цели на ${fmt(t - TARGET)}`; color = 'var(--warn)'; }
+  else { text = `Больше потолка на ${fmt(t - CAP)}`; color = 'var(--bad)'; }
+  st.textContent = text; st.style.color = t ? color : 'var(--muted)';
+  fill.style.width = Math.min(100, t / CAP * 100) + '%'; fill.style.background = color;
+  document.getElementById('mark').style.left = (TARGET / CAP * 100) + '%';
+  document.getElementById('barimg').setAttribute('aria-label', `Итого ${fmt(t)} при цели ${fmt(TARGET)} и потолке ${fmt(CAP)}`);
+}
+
+document.getElementById('add').onclick = () => {
+  items.push({ id: 'c' + Date.now(), name: 'Новая позиция', hint: '', qty: 1, price: '', warn: 300, color: '--muted', custom: true });
+  save(); render();
+};
+document.getElementById('reset').onclick = () => { items.forEach(it => it.price = ''); save(); render(); };
+document.getElementById('copy').onclick = async () => {
+  const lines = items.filter(it => Number(it.price)).map(it => `${it.name}: ${it.qty} × ${it.price} = ${sub(it)} сом`);
+  const t = items.reduce((a, it) => a + sub(it), 0);
+  const text = `Букет на театр, я на рынке.\n${lines.length ? lines.join('\n') : 'Цены пока не вписал.'}\nИтого ${t} сом (цель ${TARGET}, потолок ${CAP}).\nВопрос: `;
+  const box = document.getElementById('copybox');
+  try { await navigator.clipboard.writeText(text); document.getElementById('copied').hidden = false; box.hidden = true; }
+  catch (e) { box.value = text; box.hidden = false; box.focus(); box.select(); }
+};
+render();
+</script>
+</body>
+</html>

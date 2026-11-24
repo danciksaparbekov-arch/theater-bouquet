@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<style>html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+<title>Букет к театру</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Literata:ital,opsz,wght@1,7..72,400&display=swap">
+<style>
+/* Эскиз букета: сверху модель, которую можно крутить; ниже — образ вечера, состав, референсы, карточка продавцу.
+   Цвета — из самого букета и одежды; фон прохладный, чтобы тёплые цветы читались. */
+:root {
+  --bg: #f1f4f7; --surface: #ffffff; --ink: #1c2632; --muted: #5b6878; --line: #d9e1e9;
+  --stage: #e6ecf2; --accent: #3a69a3; --rose: #d9702f;
+  --font: 'Onest', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --quote: 'Literata', Georgia, serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121922; --surface: #1b2430; --ink: #e8edf3; --muted: #98a6b5; --line: #2b3745;
+  --stage: #18212c; --accent: #84a9da; --rose: #f0955a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121922; --surface: #1b2430; --ink: #e8edf3; --muted: #98a6b5; --line: #2b3745;
+  --stage: #18212c; --accent: #84a9da; --rose: #f0955a; color-scheme: dark }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 400 16px/1.55 var(--font); }
+.wrap { max-width: 720px; margin: 0 auto; padding-block: 18px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1 { font-size: 30px; line-height: 1.15; margin: 0 0 6px; letter-spacing: -0.015em; text-wrap: balance; }
+h2 { font-size: 19px; margin: 34px 0 12px; text-wrap: balance; }
+p { margin: 0 0 10px; max-width: 62ch; }
+.muted { color: var(--muted); }
+.small { font-size: 14px; }
+a { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* сцена с моделью */
+.stage { position: relative; background: var(--stage); border-radius: 20px; height: min(68vh, 540px); min-height: 360px; overflow: hidden; margin-top: 14px; }
+#viewer { position: absolute; inset: 0; }
+#viewer p { position: absolute; inset: auto 16px 16px; color: var(--muted); }
+.stage-ui { position: absolute; left: 12px; right: 12px; bottom: 12px; display: flex; justify-content: space-between; align-items: center; gap: 8px; pointer-events: none; }
+.seg { display: inline-flex; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 3px; pointer-events: auto; }
+.seg button { font: 600 14px/1 var(--font); color: var(--muted); background: none; border: 0; border-radius: 999px; padding: 9px 14px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+.hint { font-size: 13px; color: var(--muted); background: color-mix(in srgb, var(--surface) 80%, transparent); padding: 6px 10px; border-radius: 999px; }
+
+/* образ вечера: три колонки — она, букет, ты */
+.look { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.look-col { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.look-col h3 { margin: 0; font-size: 15px; }
+.look-col.bq { border-color: var(--rose); }
+.sw { display: flex; align-items: center; gap: 8px; font-size: 13px; line-height: 1.3; min-width: 0; }
+.sw i { width: 22px; height: 22px; border-radius: 6px; flex: none; box-shadow: inset 0 0 0 1px rgba(127,127,127,.35); }
+@media (max-width: 520px) { .look { grid-template-columns: 1fr; } .look-col { grid-template-columns: repeat(2, minmax(0, 1fr)); } .look-col h3 { grid-column: 1 / -1; } }
+.why { font-family: var(--quote); font-style: italic; font-size: 17px; line-height: 1.5; border-left: 3px solid var(--rose); padding-left: 14px; margin-top: 14px; }
+
+/* состав */
+.tbl { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 15px; }
+th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 13px; color: var(--muted); font-weight: 600; }
+td.n { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+
+ul, ol { margin: 0; padding-left: 20px; display: grid; gap: 7px; }
+.refs li span { display: block; font-size: 14px; color: var(--muted); }
+
+.show { background: var(--surface); border: 2px solid var(--rose); border-radius: 16px; padding: 16px 18px; display: grid; gap: 8px; }
+.show p { margin: 0; font-size: 20px; line-height: 1.35; font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Букет к театру</h1>
+  <p class="muted">Воскресенье, 29.11. Свежий и воздушный, но аккуратный: персиковые и абрикосовые розы, эустома, синий эрингиум, тёмный рускус, шпагат.</p>
+
+  <div class="stage">
+    <div id="viewer" aria-label="3D-модель букета, можно вращать" role="img"></div>
+    <div class="stage-ui">
+      <div class="seg" role="group" aria-label="Упаковка">
+        <button type="button" id="wrapOn" aria-pressed="true">В бумаге</button>
+        <button type="button" id="wrapOff" aria-pressed="false">Только шпагат</button>
+      </div>
+      <span class="hint">Крути пальцем</span>
+    </div>
+  </div>
+  <p class="muted small" style="margin-top:8px">Это эскиз, а не фото: настоящие цветы на рынке будут живее и неровнее, и это хорошо.</p>
+
+  <h2>Образ вечера</h2>
+  <div class="look">
+    <div class="look-col">
+      <h3>Она</h3>
+      <div class="sw"><i style="background:#e6d9c4"></i>бежевое вязаное платье</div>
+      <div class="sw"><i style="background:#1d1d1f"></i>чёрная куртка</div>
+      <div class="sw"><i style="background:#f3f0ea"></i>белое утепление</div>
+      <div class="sw"><i style="background:#c46a2e"></i>рыжие волосы</div>
+    </div>
+    <div class="look-col bq">
+      <h3>Букет</h3>
+      <div class="sw"><i style="background:#f2b48e"></i>персиковые розы</div>
+      <div class="sw"><i style="background:#ee9a64"></i>абрикосовые розы</div>
+      <div class="sw"><i style="background:#e2702a"></i>2 ярких бутона</div>
+      <div class="sw"><i style="background:#5b7db3"></i>синий эрингиум</div>
+      <div class="sw"><i style="background:#2f4f35"></i>тёмный рускус</div>
+    </div>
+    <div class="look-col">
+      <h3>Ты</h3>
+      <div class="sw"><i style="background:#f5f5f2"></i>белая рубашка оверсайз</div>
+      <div class="sw"><i style="background:#1d1d1f"></i>галстук, пальто, брюки</div>
+      <div class="sw"><i style="background:#b9bdc3"></i>металлический зажим</div>
+      <div class="sw"><i style="background:#1f4d3d"></i>изумрудный шарф</div>
+    </div>
+  </div>
+  <p class="why">Вы оба в чёрно-белом, и букет становится единственным цветным пятном. Синий и тёмно-зелёный перекликаются с твоим шарфом. Кремового мало, чтобы не слиться с её платьем, а ярко-оранжевого всего два бутона, чтобы не спорить с рыжими волосами.</p>
+
+  <h2>Состав</h2>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Что</th><th>Сколько</th><th>Зачем</th></tr></thead>
+      <tbody>
+        <tr><td><span class="dot" style="background:#f2b48e"></span>Кустовые розы, персиковые и абрикосовые</td><td class="n">4 ветки</td><td>основная масса, много бутонов на ветке</td></tr>
+        <tr><td><span class="dot" style="background:#f5c3a3"></span>Эустома, персиковая, 1 кремовая</td><td class="n">3 ветки</td><td>воздушность между розами</td></tr>
+        <tr><td><span class="dot" style="background:#5b7db3"></span>Эрингиум синий</td><td class="n">4 ветки</td><td>твой цвет, контраст с рыжим</td></tr>
+        <tr><td><span class="dot" style="background:#2f4f35"></span>Рускус тёмный</td><td class="n">3 ветки</td><td>рамка, перекличка с шарфом</td></tr>
+        <tr><td>Шпагат, кремовая бумага, ленты голубая и оранжевая</td><td class="n">1 набор</td><td>аккуратно, под её чёрно-белую куртку</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="muted small" style="margin-top:8px">Без запаха: не брать лилии, гиацинты, гипсофилу, лаванду, эвкалипт. Ориентир по цене 1 500–2 500 сом, потолок 5 000.</p>
+
+  <h2>Референсы</h2>
+  <ul class="refs">
+    <li><a href="https://flowermoxie.com/pages/blue-and-peach-moodboard" target="_blank" rel="noopener">Flower Moxie: персиковое с синим</a><span>Та самая гамма: персиковые розы с синими акцентами.</span></li>
+    <li><a href="https://flowermoxie.com/blogs/moxie-blog/dusty-blue-and-peach-package" target="_blank" rel="noopener">Flower Moxie: пыльно-синий и персик</a><span>Мягкий вариант той же пары цветов.</span></li>
+    <li><a href="https://fiftyflowers.com/products/jewel-toned-flower-bouquet" target="_blank" rel="noopener">Fifty Flowers: Jewel Toned</a><span>Персиковые кустовые розы и синий эрингиум вместе. Протеи и дельфиниум оттуда не нужны.</span></li>
+    <li><a href="https://fiftyflowers.com/products/peachy-keen-flower-bouquet" target="_blank" rel="noopener">Fifty Flowers: Peachy Keen</a><span>Персиковые розы с рускусом. Эвкалипт с фото не брать.</span></li>
+    <li><a href="https://vkusvill.ru/goods/buket-iz-persikovykh-i-belykh-kustovykh-roz-73-392337/" target="_blank" rel="noopener">ВкусВилл: персиковые кустовые розы</a><span>Как выглядят персиковые кустовые розы в простом букете.</span></li>
+    <li><a href="https://ru.pinterest.com/pin/670191988367208746/" target="_blank" rel="noopener">Pinterest: Tonal Twist</a><span>Твой второй референс: оттуда только идея синего с оранжевым и ленты.</span></li>
+  </ul>
+  <p class="muted small" style="margin-top:8px">Для продавца лучше всего твой первый референс (свежий, со шпагатом) плюс карточка ниже. Сохрани его в галерею заранее.</p>
+
+  <h2>Показать продавцу</h2>
+  <div class="show">
+    <p>Хочу букет как на фото: воздушный, аккуратный, перевязан шпагатом.</p>
+    <p>Гамма: персиковый и абрикосовый, 1–2 ярко-оранжевых цветка, заметный синий акцент, тёмная зелень.</p>
+    <p>Вместо георгинов: кустовые розы и эустома. Синий: эрингиум.</p>
+    <p>Без сильного запаха: без лилий, гипсофилы, лаванды, эвкалипта.</p>
+    <p>Небольшой, бюджет до 2 500 сом.</p>
+  </div>
+
+  <h2>План до вручения</h2>
+  <ol>
+    <li>Суббота вечером: рынок со <a href="market.html">шпаргалкой</a>. Цветы в воду, в прохладу.</li>
+    <li>Воскресенье: душ, кудри с кремом, консилер проверить у окна, часы в «не беспокоить».</li>
+    <li>Перед выходом: низ стеблей в мокрую салфетку и пакет, сверху бумага от мороза.</li>
+    <li>После спектакля: вручить и сфотографироваться с букетом на фоне её чёрной куртки.</li>
+  </ol>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="bouquet3d.js"></script>
+<script>
+(function () {
+  const v = document.getElementById('viewer');
+  let api = null;
+  try { api = window.initBouquet3D ? window.initBouquet3D(v) : null; } catch (e) { api = null; }
+  if (!api && !v.childElementCount) {
+    const p = document.createElement('p'); p.textContent = 'Модель не загрузилась в этом браузере. Ниже — состав и референсы.'; v.append(p);
+  }
+  const on = document.getElementById('wrapOn'), off = document.getElementById('wrapOff');
+  function set(w) { on.setAttribute('aria-pressed', String(w)); off.setAttribute('aria-pressed', String(!w)); if (api) api.setWrap(w); }
+  on.onclick = () => set(true); off.onclick = () => set(false);
+})();
+</script>
+</body>
+</html>
